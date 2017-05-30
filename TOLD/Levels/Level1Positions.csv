@@ -1,0 +1,12 @@
+Wall,0,0
+,Player position,
+Player,50,820
+,Door position
+Door,850,329
+,Window positions,
+BigWindow,1500,355
+BigWindow,1200,355
+BigWindow,200,355
+BigWindow,500,355
+
+

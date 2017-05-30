@@ -1,0 +1,22 @@
+Wall,0,0
+,Player position,
+Player,50,820
+,Door position
+Door,850,329
+,Window positions,
+SmallWindow,50,300
+SmallWindow,250,300
+SmallWindow,450,300
+SmallWindow,650,300
+SmallWindow,50,468
+SmallWindow,250,468
+SmallWindow,450,468
+SmallWindow,650,468
+SmallWindow,1150,300
+SmallWindow,1350,300
+SmallWindow,1550,300
+SmallWindow,1750,300
+SmallWindow,1150,468
+SmallWindow,1350,468
+SmallWindow,1550,468
+SmallWindow,1750,468

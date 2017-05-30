@@ -1,0 +1,34 @@
+Wall,0,0
+
+,Door position
+Door,850,329
+,Window positions,
+BigWindow,1300,100
+BigWindow,1300,400
+BigWindow,400,100
+BigWindow,400,400
+
+Platform,290,155
+Platform,390,155
+Platform,490,155
+Platform,590,155
+
+Platform,1520,155
+Platform,1420,155
+Platform,1320,155
+Platform,1220,155
+
+Ladder,1600,550
+Ladder,1600,450
+Ladder,1600,350
+Ladder,1600,250
+
+Ladder,100,550
+Ladder,100,450
+Ladder,100,350
+Ladder,100,250
+
+,Player position,
+Player,50,820
+
+
