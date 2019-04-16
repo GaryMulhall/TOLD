@@ -14,6 +14,8 @@ namespace TOLD
         private Sprite m_texture;
 
         Button mainMenuButton;
+        Button forwardButton;
+
         Cursor cursor;
         public HelpScreen(Game1 game) : base(game)
         {
@@ -26,6 +28,10 @@ namespace TOLD
 
             mainMenuButton = new Button();
             mainMenuButton.Load(content, new Vector2(1400, 750), "mainMenuButton", "mainMenuButtonHighlight");
+
+            forwardButton = new Button();
+            forwardButton.Load(content, new Vector2(1500, 150), "forwardArrowButton", "forwardArrowButtonHighlight");
+
             cursor = new Cursor(content);
         }
 
@@ -35,6 +41,7 @@ namespace TOLD
             spriteBatch.Begin();
             m_texture.Draw(spriteBatch);
             mainMenuButton.Draw(spriteBatch);
+            forwardButton.Draw(spriteBatch);
             cursor.Draw(spriteBatch);
             spriteBatch.End();
         }
@@ -45,6 +52,10 @@ namespace TOLD
             {
                 Game.ScreenMgr.Switch(new MainMenuScreen(Game));
             }
+            if(forwardButton.IsClicked())
+            {
+                Game.ScreenMgr.Switch(new ControlsScreen(Game))
+;            }
         }
     }
 }

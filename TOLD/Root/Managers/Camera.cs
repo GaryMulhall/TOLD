@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TOLD
 {
-    class Camera
+    class Camera // this camera will centre around the player if the screen resolution is lower than 1080p
     {
         private Vector2 m_position;
         private Viewport m_viewport;
@@ -19,7 +19,6 @@ namespace TOLD
         public Camera(Viewport viewport)
         {
             m_viewport = viewport;
-           // m_position = new Vector2(0, 0);
         }
         public void Update(Vector2 targetPosition)
         {

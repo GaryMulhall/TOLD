@@ -12,6 +12,7 @@ namespace TOLD
 
 {
     class BigWindow : CollideableSprite // inherits from CollideableSprite class
+        //Much of the code in this class is very similar to SmallWindow.cs and Door.cs, so refer here for comments
     {
 
         List<IMoveable> moveableSprites;
@@ -31,7 +32,6 @@ namespace TOLD
 
         public BigWindow(bool v, List<IMoveable> moveableSprites)
         {
-            
             OnRepair += Repair;
             this.moveableSprites = moveableSprites;
             this.v = v;
@@ -45,9 +45,10 @@ namespace TOLD
                 return new Rectangle((int)m_position.X, (int)m_position.Y, IntactTexture.Width, IntactTexture.Height);
             }
         }
+        //Causing damage to the window based on RNG
         public void WindowDamage()
         {
-            int randomNumber = random.Next(400);
+            int randomNumber = random.Next(750);
 
             if(randomNumber <=1)
             {
@@ -55,7 +56,7 @@ namespace TOLD
             }
             Vector2 Distance = m_player.Hitbox.Location.ToVector2() - m_position;
             Vector2 Direction = Vector2.Normalize(Distance);
-           
+           //Allows the player to repair the window if the meet the require parameters (have a woodpile, nail, clicked on window and they are close enough)
             if (m_player.woodPiles > 0 && m_player.nails > 0 && Hitbox.Contains(Input.WorldMousePosition) && Input.isMouseJustReleased() && Distance.Length() < 350)
             {
                 if (m_state == states.Damaged || (m_state == states.Repaired && CurrentState != RepairedTextures.Count - 1))
@@ -100,11 +101,12 @@ namespace TOLD
                 spriteBatch.Draw(RepairedTextures[CurrentState], m_position, Color.White);
             }
         }
-
+        //Sets the current state of the window to be the destroyed texture when true
         public bool IsDestroyed()
         {
             return m_state == states.Damaged && CurrentState == DamagedTextures.Count - 1;
         }
+        //changes the current state of the window based on wether it is damaged, intact or repaired
         public void Damage()
         {
             if (m_state == states.Intact)
@@ -132,6 +134,7 @@ namespace TOLD
                 }
             }
         }
+        //Repairs the window when called
         public void Repair()
         {
             if (m_state == states.Damaged)

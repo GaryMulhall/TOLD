@@ -16,7 +16,7 @@ namespace TOLD
         void Draw(SpriteBatch spriteBatch);
     }
 
-    class ScreenManager
+    class ScreenManager // handles the screen changes within the game
     {
         private IScreen Current;
         private IScreen Previous;
@@ -27,7 +27,7 @@ namespace TOLD
         {
             Content = content;
         }
-
+        //allows the screens to be switched based on input from the user
         public void Switch(IScreen screen)
         {
             if (screen == null)
@@ -37,10 +37,9 @@ namespace TOLD
             Current = screen;
             Current.Load(Content, new Vector2());
         }
-
+        //allows switching back from one screen to the previous one while maintaining what was happening on the original screen
         public void SwitchBack()
         {
-
             if(Current == Previous)
             {
                 throw new InvalidOperationException("Cannot use SwitchBack twice in a row");

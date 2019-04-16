@@ -34,7 +34,8 @@ namespace TOLD
             m_highlightTexture = content.Load<Texture2D>(highlightName);
             m_position = pos;
         }
-
+       //checks if a button has been clicked when called by first checking if the button is visible on the screen
+       //(this is used for the "Next" button which is drawn when the player completes a level)
         public bool IsClicked()
         {
             if(isEnabled == false)

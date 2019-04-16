@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TOLD
 {
-    static class Input
+    static class Input //allows ease of use when handling inputs
     {
         public static Camera camera = null;
         public static KeyboardState currentKey;
@@ -18,7 +18,7 @@ namespace TOLD
         public static MouseState prevMouseState;
 
         public static Point MousePosition { get { return currentMouseState.Position; } }
-
+        //creates a seperate mouse position for where the mouse is in the game world as opposed to on the screen
         public static Vector2 WorldMousePosition
         {
             get

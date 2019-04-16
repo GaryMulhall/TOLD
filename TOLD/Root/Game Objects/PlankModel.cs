@@ -25,7 +25,7 @@ namespace TOLD
 
         public void Draw(GraphicsDevice graphics)
         {
-            // Important piece of code that enables depth buffer for 3d objects
+            // Enabling the depth buffer
             graphics.DepthStencilState = new DepthStencilState()
             {
                 DepthBufferEnable = true
@@ -39,7 +39,7 @@ namespace TOLD
             };
         }
 
-        // Creates a helper function that allows us to easily draw models
+        // Draws the model based on positions and camerapositions
         private void DrawModel(GraphicsDevice graphics, Model model, Vector3 position, float angle = 0)
         {
             foreach (ModelMesh mesh in model.Meshes)
@@ -51,19 +51,16 @@ namespace TOLD
 
                     effect.World = Matrix.CreateTranslation(position)  *  Matrix.CreateRotationX(MathHelper.ToRadians(245)) * Matrix.CreateRotationY(m_angle);
 
-                    // Move the camera 10 units away from the origin:
+                    // Move the camera 150 units away from the origin:
                     var cameraPosition = new Vector3(150, 0, 150);
                     // Tell the camera to look at the origin:
                     var cameraLookAtVector = Vector3.Zero;
-                    // Tell the camera that positive Z is up
+                    // Tell the camera that positive Y is up
                     var cameraUpVector = Vector3.UnitY;
 
                     effect.View = Matrix.CreateLookAt(cameraPosition, cameraLookAtVector, cameraUpVector);
 
-                    // We want the aspect ratio of our display to match
-                    // the entire screen's aspect ratio:
                     float aspectRatio = graphics.Viewport.AspectRatio;
-
                     float fieldOfView = MathHelper.PiOver4;
                     float nearClipPlane = 1;
                     float farClipPlane = 2000;

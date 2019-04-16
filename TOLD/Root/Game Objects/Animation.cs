@@ -29,7 +29,7 @@ namespace TOLD
 
         private int m_frame;
         private float m_timeElapsed;
-
+        //Setting the required parameters for an animation to be played (with the exception of repeating being optional)
         public Animation(Texture2D spritesheet, float timePerFrame, int columns, int rows, int startFrame=0, int endFrame=-1, bool repeating=true)
         {
             m_spritesheet = spritesheet;
@@ -45,12 +45,17 @@ namespace TOLD
 
             m_startFrame = startFrame;
             m_endFrame = endFrame;
-
+            //The total frames of the animation is the total number of columns multiplied by the total number of rows allowing spritesheets to vary in size
             int totalFrames = m_columns * m_rows;
             if (m_endFrame == -1)
             {
                 m_endFrame = totalFrames - 1;
             }
+        }
+        //If the animation should be reset, the current frame will be switched to frame 0
+        public void Reset()
+        {
+            m_frame = 0;
         }
 
         public void Update(GameTime gameTime)
@@ -79,6 +84,7 @@ namespace TOLD
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position, SpriteEffects Effects = SpriteEffects.None)
         {
+            //Math which handles the animations playing
             int row = (int)Math.Floor((double)m_frame / (double)m_columns);
             int column = m_frame - (row * m_columns);
 

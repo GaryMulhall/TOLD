@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace TOLD
 {
-    class PlayerEntry : BaseScreen
+    class PlayerEntry : BaseScreen //allowsthe player to enter their name to be displayed on the highscore screen
+        //this is done by checking which keys are/have been pressed then writing them to a file and drawing them to the highscore screen
     {
    private Sprite m_texture;
 

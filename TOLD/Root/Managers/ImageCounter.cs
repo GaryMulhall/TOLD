@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TOLD
 {
-    class ImageCounter
+    class ImageCounter //this counter allows the players current lives, woodpiles and nails to be displayed on the heads up display
     {
         Texture2D m_activeTexture;
         Texture2D m_inactiveTexture;
@@ -32,6 +32,17 @@ namespace TOLD
             m_count = count;
         }
 
+        public Vector2 Position
+        {
+            get
+            {
+                return m_position;
+            }
+            set
+            {
+                m_position = value;
+            }
+        }
         public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < m_maxCount; i++)

@@ -13,10 +13,9 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace TOLD
 {
-    //GameScreen inherits from the BaseScreen class
+    //GameScreen inherits from the BaseScreen class and contains most things which will be displayed on screen during gameplay
     class GameScreen : BaseScreen
     {
-
         int currentLevel;
         List<IMoveable> moveableSprites;
         List<ICollideable> collideableSprites;
@@ -26,7 +25,7 @@ namespace TOLD
         Button continueButton;
         SpriteFont font;
         public int repairs;
-
+        bool isPaused = false;
         ContentManager m_content;
 
         Camera camera;
@@ -44,7 +43,6 @@ namespace TOLD
             : base(game)
         {
         }
-
         private void RepairCount()
         {
             repairs++;
@@ -69,7 +67,7 @@ namespace TOLD
             Input.camera = camera;
             m_content = content;
         }
-
+        //Levels are loaded using .CSV files within the content folder. Positions of objects on screen are handled the same way for the most part
         private void LoadLevel(ContentManager content, int level)
         {
             currentLevel = level;
@@ -80,7 +78,7 @@ namespace TOLD
             moveableSprites.Clear();
 
             string[] lines;
-
+            //Checks if the level exists using the path of folders
             if (File.Exists("../../../Levels/" + levelName))
             {
                 lines = File.ReadAllLines("../../../Levels/" + levelName);
@@ -89,22 +87,26 @@ namespace TOLD
             {
                 lines = File.ReadAllLines("Levels/" + levelName);
             }
+                //Throws an exception if the level does not exist/cannot be found
             else { throw new FileNotFoundException("Level file not found!"); }
+            //Checking the .CSV files within the level folders and reading/drawing positions using comma delimitation
             foreach (string line in lines)
             {
+                //Commas seperate information in the .CSV files
                 string[] values = line.Split(',');
+                //The first space comes first and is the name of the object
                 if (!string.IsNullOrWhiteSpace(values[0]))
                 {
                     float x;
                     float y;
-
+                    //Here the second and third cells in the row are checked and used as the X and Y positions of the object
                     try
                     {
                         float.TryParse(values[1], out x);
                         float.TryParse(values[2], out y);
                     }
                     catch { continue; }
-
+                    //Checking the first cell and drawing the correct object
                     if (values[0] == "Wall")
                     {
                         addCollideable(content, new Vector2(x, y), new Wall(true));
@@ -143,19 +145,6 @@ namespace TOLD
                         window.OnRepair += RepairCount;
                         addCollideable(content, new Vector2(x, y), window);
                     }
-
-                    else if (values[0] == "Enemy")
-                    {
-                        float velocityX;
-                        float velocityY;
-
-                        try
-                        {
-                            float.TryParse(values[3], out velocityX);
-                            float.TryParse(values[4], out velocityY);
-                        }
-                        catch { continue; }
-                    }
                 }
             }
         }
@@ -175,7 +164,8 @@ namespace TOLD
         {
             elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             cursor.SetCursor(Cursors.normal);
-            continueButton.isEnabled = (repairs >= 1);
+            continueButton.isEnabled = (repairs >= 15);
+            isPaused = continueButton.isEnabled;
 
             if (moveableSprites.OfType<Player>().Count() > 0)
             {
@@ -184,53 +174,75 @@ namespace TOLD
                 woodPileCounter.SetCount(player.woodPiles);
                 nailCounter.SetCount(player.nails);
             }
+            //The current level can be reset using the R key (for testing only)
             if (Input.beenPressed(Keys.R))
             {
                 LoadLevel(Game.Content, currentLevel);
             }
+            //Levels can be skipped through using the Num Pad 0 key (for testing only)
             if (Input.beenPressed(Keys.NumPad0))
             {
                 LoadLevel(Game.Content, currentLevel + 1);
             }
+            //The game can be paused using the P key
             bool pPressed = Input.beenPressed(Keys.P);
-
+            //If P is pressed the game will switch to the pause screen and freeze the game in the background
             if (pPressed)
             {
                 Game.ScreenMgr.Switch(new PauseScreen(Game));
             }
+            //Checking if big windows are destroyed and drawing an enemy at a 1 in 750 chance (60 x per second) if they are
             foreach (var bigWindow in collideableSprites.OfType<BigWindow>())
             {
-                if (bigWindow.IsDestroyed() && random.Next(500) == 1)
+                if (bigWindow.IsDestroyed() && random.Next(750) == 1)
                 {
-                    addMoveable(m_content, bigWindow.Hitbox.Location.ToVector2(), new Enemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
+                    addMoveable(m_content, bigWindow.Hitbox.Location.ToVector2(), new NormalEnemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
                 }
+                //Checking if big windows are destroyed and drawing a stronger enemy at a 1 in 3000 chance (60 x per second) if they are
+
+                if (bigWindow.IsDestroyed() && random.Next(3000) == 1)
+                {
+                    addMoveable(m_content, bigWindow.Hitbox.Location.ToVector2(), new RedEnemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
+                }
+                //Changing the cursor to the hammer if it is contained by a big window
                 if (bigWindow.Hitbox.Contains((Input.WorldMousePosition)))
                 {
                     cursor.SetCursor(Cursors.hammer);
                 }
             }
+            //See above comments
             foreach (var smallWindow in collideableSprites.OfType<SmallWindow>())
             {
                 if (smallWindow.IsDestroyed() && random.Next(1300) == 1)
                 {
-                    addMoveable(m_content, smallWindow.Hitbox.Location.ToVector2(), new Enemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
+                    addMoveable(m_content, smallWindow.Hitbox.Location.ToVector2(), new NormalEnemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
+                }
+                if (smallWindow.IsDestroyed() && random.Next(3000) == 1)
+                {
+                    addMoveable(m_content, smallWindow.Hitbox.Location.ToVector2(), new RedEnemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
                 }
                 if (smallWindow.Hitbox.Contains((Input.WorldMousePosition)))
                 {
                     cursor.SetCursor(Cursors.hammer);
                 }
             }
+            //See above comments
             foreach (var door in collideableSprites.OfType<Door>())
             {
-                if (door.IsDestroyed() && random.Next(700) == 1)
+                if (door.IsDestroyed() && random.Next(900) == 1)
                 {
-                    addMoveable(m_content, door.Hitbox.Location.ToVector2(), new Enemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
+                    addMoveable(m_content, door.Hitbox.Location.ToVector2(), new NormalEnemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
+                }
+                if (door.IsDestroyed() && random.Next(3000) == 1)
+                {
+                    addMoveable(m_content, door.Hitbox.Location.ToVector2(), new RedEnemy(true, moveableSprites.OfType<Player>().First(), collideableSprites, moveableSprites, new Vector2(0, 1)));
                 }
                 if (door.Hitbox.Contains((Input.WorldMousePosition)))
                 {
                     cursor.SetCursor(Cursors.hammer);
                 }
             }
+            //Setiing the cursor to the sword if it is hovering over an enemy
             foreach (var enemy in moveableSprites.OfType<Enemy>())
             {
                 if (enemy.Hitbox.Contains((Input.WorldMousePosition)))
@@ -238,6 +250,14 @@ namespace TOLD
                     cursor.SetCursor(Cursors.sword);
                 }
             }
+            foreach (var redEnemy in moveableSprites.OfType<RedEnemy>())
+            {
+                if (redEnemy.Hitbox.Contains((Input.WorldMousePosition)))
+                {
+                    cursor.SetCursor(Cursors.sword);
+                }
+            }
+            //If the player clicks on a nail within the world and the nail counter is not full it is collected and added to the counter
             foreach (var nail in collideableSprites.OfType<Nail>())
             {
                 if (nail.Hitbox.Contains(Input.WorldMousePosition) && Input.isMouseJustClicked() && m_player.nails < 5)
@@ -245,7 +265,6 @@ namespace TOLD
                     nail.Destroyed = true;
                     m_player.nails++;
                     PickupSound.Play();
-
                 }
             }
             foreach (var woodPile in collideableSprites.OfType<WoodPile>())
@@ -255,18 +274,21 @@ namespace TOLD
                     woodPile.Destroyed = true;
                     m_player.woodPiles++;
                     PickupSound.Play();
-
                 }
             }
-
-            foreach (var moveable in moveableSprites)
+            //Game runs if it is not paused (WHODDA THUNK IT?)
+            if (isPaused == false)
             {
-                moveable.Update(gameTime);
+                foreach (var moveable in moveableSprites)
+                {
+                    moveable.Update(gameTime);
+                }
+                foreach (var collidable in collideableSprites)
+                {
+                    collidable.Update(gameTime);
+                }
             }
-            foreach (var collidable in collideableSprites)
-            {
-                collidable.Update(gameTime);
-            }
+          //The continue button can be clicked at the end of levels. If the player is not on level 5, the next level is loaded, else, the highscore entry screen is loaded
             if (continueButton.IsClicked())
             {
                 if (currentLevel < 5)
@@ -301,6 +323,10 @@ namespace TOLD
             foreach (var enemy in moveableSprites.OfType<Enemy>())
             {
                 enemy.Draw(spriteBatch);
+            }
+            foreach (var redEnemy in moveableSprites.OfType<RedEnemy>())
+            {
+                redEnemy.Draw(spriteBatch);
             }
             spriteBatch.End();
 

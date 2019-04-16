@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -14,7 +14,7 @@
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <MonoGameContentBuilderExe>
     </MonoGameContentBuilderExe>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -50,6 +50,8 @@
     <Compile Include="Root\Game Objects\Cursor.cs" />
     <Compile Include="Root\Game Objects\Ladder.cs" />
     <Compile Include="Root\Game Objects\Nail.cs" />
+    <Compile Include="Root\Game Objects\NormalEnemy.cs" />
+    <Compile Include="Root\Game Objects\RedEnemy.cs" />
     <Compile Include="Root\Game Objects\SmallWindow.cs" />
     <Compile Include="Root\Game Objects\Wall.cs" />
     <Compile Include="Root\Game Objects\PlankModel.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Root\Managers\Input.cs" />
     <Compile Include="Root\Managers\ScreenManager.cs" />
     <Compile Include="Root\Screens\BaseScreen.cs" />
+    <Compile Include="Root\Screens\ControlsScreen.cs" />
     <Compile Include="Root\Screens\GameOverScreen.cs" />
     <Compile Include="Root\Screens\GameScreen.cs" />
     <Compile Include="Root\Screens\HighScoreScreen.cs" />

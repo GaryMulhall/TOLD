@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Audio;
 namespace TOLD
 {
     abstract class CollideableSprite : ICollideable //CollideableSprite  inherits properties from the ICollideable interface
+        //All collideable, but non-moveable sprites inherit from this class
     {
         protected Texture2D m_texture;
         protected Vector2 m_position;
@@ -42,9 +43,8 @@ namespace TOLD
                 }
                 spriteBatch.Draw(m_texture, m_position, Color.White);
             }
-
         }
-
+        //allows for the removal of collideables when called (death etc.)
         public bool Destroyed
         {
             get; set;
@@ -79,6 +79,7 @@ namespace TOLD
             m_prevPosition = m_position;
         }
     }
+    //a seperate class for collideable sprites which do not need to move, but are animated
     abstract class AnimatedCollideableSprite : CollideableSprite
     {
         protected virtual Animation m_animation { get; set; }

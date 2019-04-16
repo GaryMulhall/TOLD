@@ -20,20 +20,13 @@ namespace TOLD
         Cursor cursor;
         Dictionary<string, int> highScore = new Dictionary<string, int>();
   
-        public HighScoreScreen(Game1 game)
-            : base(game)
-        {
-            highScore = LoadFile("HallOfFame.csv");
-  
-        }
-
         public HighScoreScreen(Game1 game, string name, int score)
             : base(game)
         {
-            highScore = LoadFile("HighScore.csv");
+            highScore = LoadFile("HighScore.csv"); //Loads the Highscore.csv file from the content folder
             highScore[name] = score;
             highScore.OrderByDescending(item => item.Value);
-            SaveFile("HighScore.csv", highScore);
+            SaveFile("HighScore.csv", highScore); //allows saving to the csv file
         }
 
         public override void Load(ContentManager content, Vector2 pos)
@@ -49,7 +42,6 @@ namespace TOLD
             font = content.Load<SpriteFont>("Font");
             cursor = new Cursor(content);
         }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
@@ -59,6 +51,7 @@ namespace TOLD
             cursor.Draw(spriteBatch);
             int padding = 0;
 
+            //takes the contents of the csv file and draws it on the screen in the correct position with some added padding between the name and score
             foreach (var item in highScore)
             {
                 string line = item.Key + ":" + item.Value.ToString();
